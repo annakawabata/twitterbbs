@@ -67,7 +67,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()){
 			);
 		$record=mysqli_query($db,$sql) or die(mysqli_error($db));
 		$table=mysqli_fetch_assoc($record);
-		$message= '@' . $table['name'] . ''. $table['message'];
+		$message= '@'.$table['name'] . ''. $table['message'];
 	}
 	//htmlspqcialcharsetのショートカット
 	function h($value){
@@ -81,6 +81,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()){
 <head>
 	<meta http-equiv="Content-Type" content="text/html"; charset="UTF-8"/>
 	<link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="bootstrap/scc/bootstrap-theme.css">
 	<title>ひとこと掲示板</title>
 </head>
 <body>

@@ -2,7 +2,7 @@
 session_start();
 require('dbconnect.php');
 if(empty($_REQUEST['id'])){
-	header('location: http://' . $_SERVER['HTTP_HOST'] . '/Twitter_bbs/index.php');
+	header('location: http://' . $_SERVER['HTTP_HOST'] . '/Twitter_bbs/index2.php');
 	exit();
 }
 //投稿を取得する
@@ -27,7 +27,7 @@ $posts = mysqli_query($db, $sql) or die(mysqli_error($db));
 		<h1>ひとこと掲示板</h1>
 	</div>
 	<div id="content">
-	<p>&laquo;<a href="index.php">一覧にもどる</a></p>
+	<p>&laquo;<a href="index2.php">一覧にもどる</a></p>
 	<?php
 	if($post = mysqli_fetch_assoc($posts)):
 	?>
