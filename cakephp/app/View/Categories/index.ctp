@@ -16,8 +16,6 @@
         <td>
             <?php echo $this->Html->link($category['Category']['title'],
 array('controller' => 'categories', 'action' => 'view', $categories['Category']['id'])); ?>
-        </td>
-        <td><?php echo $categories['Category']['created']; ?></td>
     </tr>
     <?php endforeach; ?>
     <?php unset($category); ?>

@@ -5,8 +5,11 @@ class PostsController extends AppController {
     public $components = array('Session');
 
     public function index() {
-        $this->set('posts', $this->Post->find('all',array('order' => array('Post.id'))));
+        //$this->set('posts', $this->Post->find('all',array('order' => array('Post.id'))));
         $this->set('categories', $this->_get_categories_append_count());
+        $this->set('posts_life', $this->Post->find('all',array('conditions'=>array('Post.type_id'=>1),'order' => array('Post.modified'=>'desc'),'limit'=> '2')));
+        $this->set('posts_activity', $this->Post->find('all',array('conditions'=>array('Post.type_id'=>2),'order' => array('Post.modified'=>'desc'),'limit'=> '2')));
+        $this->set('posts_restrant', $this->Post->find('all',array('conditions'=>array('Post.type_id'=>3),'order' => array('Post.modified'=>'desc'),'limit'=> '2')));
     }
 
         public function category_index($category_id = null){
@@ -38,6 +41,7 @@ class PostsController extends AppController {
         $this->set(compact('categories'));
         if ($this->request->is('post')) {
             $this->Post->create();
+            $this->request->data['Post']['user_id'] = $this->Auth->user('id'); //Added this line
             if ($this->Post->save($this->request->data)) {
                 $this->Session->setFlash(__('Your post has been saved.'));
                 return $this->redirect(array('action' => 'index'));
@@ -84,7 +88,7 @@ class PostsController extends AppController {
     }
 
     return $this->redirect(array('action' => 'index'));
-}
+    }
     private function _get_categories_append_count(){
         $categories = $this->Category->find('all');
         $index = 0;
@@ -95,6 +99,23 @@ class PostsController extends AppController {
             $index++;
         }
         return $categories;
+    }
+
+    public function isAuthorized($user) {
+        // 登録済ユーザーは投稿できる
+        if ($this->action === 'add') {
+            return true;
+        }
+
+        // 投稿のオーナーは編集や削除ができる
+        if (in_array($this->action, array('edit', 'delete'))) {
+            $postId = (int) $this->request->params['pass'][0];
+            if ($this->Post->isOwnedBy($postId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
     }
 
 }
